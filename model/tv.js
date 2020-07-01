@@ -25,6 +25,9 @@ const tvSchema = new Schema({
 	},
 	id:{
 		type:Number
+	},
+	review:{
+		type:String
 	}
 },
 {

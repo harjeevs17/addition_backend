@@ -25,6 +25,9 @@ const bookSchema = new Schema({
 	},
 	id:{
 		type:String
+	},
+	review:{
+		type:String
 	}
 },
 {

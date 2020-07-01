@@ -25,6 +25,9 @@ const watchSchema = new Schema({
 	},
 	id:{
 		type:Number
+	},
+	review:{
+		type:String
 	}
 	
 	

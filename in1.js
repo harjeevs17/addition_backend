@@ -7,15 +7,15 @@ const express = require("express");
 const assert = require("assert");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
+const hostname = "localhost";
 const http = require("http");
 var router = express.Router();
-const port = 8008;
+const port = 8080;
 const cors = require("cors");
 const app = express();
 
 app.use(morgan("dev"));
 app.use(bodyParser.json());
-app.set('port', (process.env.PORT || 8080))
 app.use(express.static(__dirname + "/public"));
 
 const url = "mongodb://localhost:27017/addition";
@@ -47,9 +47,7 @@ app.post("/insert-movie", function (req, res, next) {
         description: req.body.description,
         status: req.body.status,
         rating: req.body.rating,
-		id:req.body.id,
-		review:req.body.review,
-		}
+		id:req.body.id,}
 		},{upsert:true})
       .then(() => {
         res.sendStatus(200);
@@ -81,9 +79,7 @@ app.post("/insert-tv", function (req, res, next) {
         description: req.body.description,
         status: req.body.status,
         rating: req.body.rating,
-		id:req.body.id,
-		review:req.body.review,
-		}
+		id:req.body.id,}
 		},{upsert:true})
       .then(() => {
         res.sendStatus(200);
@@ -116,9 +112,7 @@ app.post("/insert-book", function (req, res, next) {
         description: req.body.description,
         status: req.body.status,
         rating: req.body.rating,
-		id:req.body.id,
-		review:req.body.review,
-		}
+		id:req.body.id,}
 		},{upsert:true})
       .then(() => {
         res.sendStatus(200);
@@ -131,11 +125,11 @@ app.post("/insert-book", function (req, res, next) {
 });
 app.use(cors());
 app.use(bodyParser.json());
-app.get("/fetch-movies/:status", function (req, res, next) {
+app.get("/fetch-movies", function (req, res, next) {
   connect.then((db) => {
     console.log("Connected successfully");
     watchs
-      .find({status:req.params.status})
+      .find()
       .sort({ status: -1 })
       .then((result) => {
         res.send(result);
@@ -145,11 +139,11 @@ app.get("/fetch-movies/:status", function (req, res, next) {
       });
   });
 });
-app.get("/fetch-books/:status", function (req, res, next) {
+app.get("/fetch-books", function (req, res, next) {
   connect.then((db) => {
     console.log("Connected successfully");
     book
-      .find({status:req.params.status})
+      .find()
       .sort({ status: -1 })
       .then((result) => {
         res.send(result);
@@ -159,10 +153,10 @@ app.get("/fetch-books/:status", function (req, res, next) {
       });
   });
 });
-app.get("/fetch-tv/:status", function (req, res, next) {
+app.get("/fetch-tv", function (req, res, next) {
   connect.then((db) => {
     console.log("Connected successfully");
-    tv.find({status:req.params.status})
+    tv.find()
       .sort({ status: -1 })
       .then((result) => {
         res.send(result);
@@ -176,7 +170,7 @@ app.get("/fetch-tv/:status", function (req, res, next) {
 app.get("/fetch-movie-rating/:id", function (req, res, next) {
 	connect.then((db) => {
     console.log("Connected successfully");
-    watchs.find({id:req.params.id}, {rating:1,review:1})
+    watchs.find({id:req.params.id}, {rating:1})
       .sort({ status: -1 })
       .then((result) => {
         res.send(result);
@@ -190,7 +184,7 @@ app.get("/fetch-movie-rating/:id", function (req, res, next) {
 app.get("/fetch-tv-rating/:id", function (req, res, next) {
 	connect.then((db) => {
     console.log("Connected successfully");
-    tv.find({id:req.params.id}, {rating:1,review:1})
+    tv.find({id:req.params.id}, {rating:1})
       .sort({ status: -1 })
       .then((result) => {
         res.send(result);
@@ -204,7 +198,7 @@ app.get("/fetch-tv-rating/:id", function (req, res, next) {
 app.get("/fetch-book-rating/:id", function (req, res, next) {
 	connect.then((db) => {
     console.log("Connected successfully");
-    book.find({id:req.params.id}, {rating:1,review:1})
+    book.find({id:req.params.id}, {rating:1})
       .sort({ status: -1 })
       .then((result) => {
         res.send(result);
@@ -217,7 +211,6 @@ app.get("/fetch-book-rating/:id", function (req, res, next) {
 
 const server = http.createServer(app);
 
-app.listen(app.get('port'), function() {
-  console.log("Node app is running at localhost:" + app.get('port'))
-})
-
+server.listen(port, hostname, () => {
+  console.log("Listening...");
+});
