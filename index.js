@@ -18,11 +18,14 @@ app.use(bodyParser.json());
 app.set("port", process.env.PORT || 8080);
 app.use(express.static(__dirname + "/public"));
 
-const url = "mongodb://localhost:27017/addition";
+const url = "mongodb+srv://harjeevs17:harjeev1@cluster0.h6zpf.mongodb.net/addition";
 mongoose.set("useNewUrlParser", true);
 mongoose.set("useUnifiedTopology", true);
 mongoose.set("useCreateIndex", true);
 const connect = mongoose.connect(url);
+mongoose.connection.once('open', function () {
+  console.log('MongoDB database connection established successfully')
+})
 
 app.use(cors());
 app.use(bodyParser.json());
